@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-cream text-body font-body font-normal antialiased;
+}
+
+::selection {
+  background-color: #F59E0B;
+  color: #1F1B12;
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-6xl px-6 md:px-10;
+}
+
+.eyebrow {
+  @apply inline-flex items-center gap-2 rounded-full border border-amber-600/30 bg-amber-50 px-3 py-1 font-mono text-[12px] font-medium tracking-tight text-amber-700;
+}
+
+.chart-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 2.2s ease-out forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream;
+}
