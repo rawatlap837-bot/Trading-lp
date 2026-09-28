@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  @apply bg-ink text-white antialiased;
+}
+
+::selection {
+  background-color: #cbfe1c;
+  color: #1c1d20;
+}
+
+/* Hide the native cursor only while the custom lime cursor is active */
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button {
+    cursor: none;
+  }
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
