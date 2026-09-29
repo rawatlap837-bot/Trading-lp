@@ -11,8 +11,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-ink py-10">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-6 px-6 md:flex-row md:px-12">
-        <a href="#top" className="font-display text-2xl text-white">
-          M<span className="text-lime">3</span>{' '}
+        <a href="#top" className="flex items-center gap-3 rounded-full">
+          <img src="/logo.png" alt="M3" className="h-10 w-auto object-contain" />
           <span className="text-xs font-normal tracking-[0.2em] text-muted">MARKET MINDSET MASTERY</span>
         </a>
         <nav className="flex flex-wrap justify-center gap-6">

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import SplitText, { toWords } from './SplitText.jsx'
 import FloatingOrbs from './FloatingOrbs.jsx'
 
+
 // Image from the original M3 landing page (kept as-is)
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1634542984003-e0fb8e200e91?auto=format&fit=crop&w=1200&q=80'

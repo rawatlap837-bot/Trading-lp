@@ -16,9 +16,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 w-full bg-ink/90 backdrop-blur">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-3 md:px-12">
         <a href="#top" className="focus-ring flex items-center gap-3 rounded-full">
-          <span className="font-display text-2xl tracking-tight text-white">
-            M<span className="text-lime">3</span>
-          </span>
+          <img src="/logo.png" alt="M3" className="h-10 w-auto object-contain" />
           <span className="hidden text-xs font-medium tracking-[0.2em] text-muted sm:inline">
             MARKET MINDSET MASTERY
           </span>
