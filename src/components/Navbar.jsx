@@ -16,7 +16,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 w-full bg-ink/90 backdrop-blur">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-3 md:px-12">
         <a href="#top" className="focus-ring flex items-center gap-3 rounded-full">
-          <img src="/logo.png" alt="M3" className="h-10 w-auto object-contain" />
+          <img src="/logo.png" alt="M3" className="h-16 w-auto object-contain" />
           <span className="hidden text-xs font-medium tracking-[0.2em] text-muted sm:inline">
             MARKET MINDSET MASTERY
           </span>
@@ -27,15 +27,13 @@ export default function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className={`group relative text-sm font-medium tracking-wide transition-colors hover:text-lime ${
-                active === l.id ? 'text-lime' : 'text-white/80'
-              }`}
+              className={`group relative text-sm font-medium tracking-wide transition-colors hover:text-lime ${active === l.id ? 'text-lime' : 'text-white/80'
+                }`}
             >
               {l.label}
               <span
-                className={`absolute -bottom-1 left-0 h-px bg-lime transition-all duration-300 group-hover:w-full ${
-                  active === l.id ? 'w-full' : 'w-0'
-                }`}
+                className={`absolute -bottom-1 left-0 h-px bg-lime transition-all duration-300 group-hover:w-full ${active === l.id ? 'w-full' : 'w-0'
+                  }`}
               />
             </a>
           ))}
@@ -76,9 +74,8 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className={`text-sm font-medium tracking-wide hover:text-lime ${
-                active === l.id ? 'text-lime' : 'text-white/80'
-              }`}
+              className={`text-sm font-medium tracking-wide hover:text-lime ${active === l.id ? 'text-lime' : 'text-white/80'
+                }`}
             >
               {l.label}
             </a>
