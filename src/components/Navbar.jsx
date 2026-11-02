@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { useActiveSection } from '../hooks/useReveal.js'
 
 const links = [
-  { href: '#program', id: 'program', label: 'Program' },
-  { href: '#learn', id: 'learn', label: "What you'll learn" },
-  { href: '#why', id: 'why', label: 'Why M3' },
+  { href: '#about', id: 'about', label: 'About' },
+  { href: '#learn', id: 'learn', label: 'Curriculum' },
+  { href: '#program', id: 'program', label: 'Learning Journey' },
+  { href: '#why', id: 'why', label: 'Why Us' },
   { href: '#faq', id: 'faq', label: 'FAQ' },
 ]
 
@@ -16,9 +17,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 w-full bg-ink/90 backdrop-blur">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-3 md:px-12">
         <a href="#top" className="focus-ring flex items-center gap-3 rounded-full">
-          <img src="/logo.png" alt="M3" className="h-16 w-auto object-contain" />
+          <img src="/logo.png" alt="HedgeScience" className="h-16 w-auto object-contain" />
           <span className="hidden text-xs font-medium tracking-[0.2em] text-muted sm:inline">
-            MARKET MINDSET MASTERY
+            HEDGESCIENCE
           </span>
         </a>
 
@@ -44,7 +45,7 @@ export default function Navbar() {
             href="#enroll"
             className="focus-ring hidden rounded-full bg-lime px-6 py-3 text-sm font-bold tracking-wide text-ink transition-transform hover:scale-105 md:inline-block"
           >
-            ENROLL NOW
+            ENROL NOW
           </a>
           <button
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -85,7 +86,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-2 w-fit rounded-full bg-lime px-6 py-3 text-sm font-bold tracking-wide text-ink"
           >
-            ENROLL NOW
+            ENROL NOW
           </a>
         </nav>
       </div>

@@ -4,7 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        lime: '#cbfe1c',
+        lime: '#7dd3fc',
+        mint: '#7dd3fc',
+        teal: '#1e3a5f',
         ink: '#1c1d20',
         muted: '#ababab',
       },

@@ -12,21 +12,16 @@ body {
 }
 
 ::selection {
-  background-color: #cbfe1c;
-  color: #1c1d20;
-}
-
-/* Hide the native cursor only while the custom lime cursor is active */
-@media (pointer: fine) {
-  body.custom-cursor-active,
-  body.custom-cursor-active a,
-  body.custom-cursor-active button {
-    cursor: none;
-  }
+  background-color: #7dd3fc;
+  color: #ffffff;
 }
 
 .focus-ring {
-  @apply outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px #1c1d20, 0 0 0 4px #7dd3fc;
 }
 
 @media (prefers-reduced-motion: reduce) {

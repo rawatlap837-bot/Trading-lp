@@ -28,7 +28,7 @@ export default function FloatingOrbs({ className = '' }) {
             left: o.left,
             animationDelay: `${o.delay}s`,
             animationDuration: `${o.duration}s`,
-            background: 'radial-gradient(circle at 32% 28%, #eaffb0, #cbfe1c 45%, #6f9e0c 100%)',
+            background: 'radial-gradient(circle at 32% 28%, #e0f2fe, #7dd3fc 45%, #0284c7 100%)',
             boxShadow: '0 0 12px rgba(203,254,28,0.55)',
           }}
         />
