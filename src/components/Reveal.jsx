@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
  * into view. One direction, no re-triggering — keeps motion deliberate
  * instead of janky on re-scroll.
  */
-export default function Reveal({ children, delay = 0, className = '' }) {
+export default function Reveal({ children, delay = 0, className = '', style = {} }) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
 
@@ -34,7 +34,7 @@ export default function Reveal({ children, delay = 0, className = '' }) {
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: visible ? `${delay}ms` : '0ms' }}
+      style={{ ...style, transitionDelay: visible ? `${delay}ms` : '0ms' }}
       className={
         'transition-all duration-700 ease-out motion-reduce:transition-none ' +
         (visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8') +

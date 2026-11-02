@@ -8,7 +8,57 @@ html {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: clip;
   @apply bg-ink text-white antialiased;
+}
+
+html.page-motion-ready [data-page-motion] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 650ms ease, transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+html.page-motion-ready [data-page-motion].page-motion-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .footer-layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+@media (min-width: 360px) and (max-width: 1023px) {
+  .philosophy-last-grid-item {
+    grid-column: span 2 / span 2;
+    display: flex;
+    justify-content: center;
+  }
+
+  .philosophy-last-card {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .learning-card-deck {
+    display: block;
+  }
+
+  .learning-deck-item {
+    position: sticky;
+    top: calc(76px + var(--stack-offset, 0px));
+    margin-bottom: 1rem;
+  }
 }
 
 ::selection {
@@ -21,11 +71,158 @@ body {
 }
 
 .focus-ring:focus-visible {
-  box-shadow: 0 0 0 2px #1c1d20, 0 0 0 4px #7dd3fc;
+  box-shadow: 0 0 0 3px #1c1d20, 0 0 0 6px #7dd3fc;
+}
+
+.copy-emphasis strong {
+  font-weight: 800;
+  text-decoration-color: rgba(125, 211, 252, 0.65);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.copy-emphasis .important-line {
+  color: #fff;
+  font-weight: 800;
+  text-decoration-line: underline;
+  text-decoration-color: #7dd3fc;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.button-primary,
+.button-secondary,
+.button-dark {
+  display: inline-flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 9999px;
+  padding: 0.9rem 1.65rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  line-height: 1.25;
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.button-primary {
+  border: 1px solid #7dd3fc;
+  background: #7dd3fc;
+  color: #1c1d20;
+  box-shadow: 0 8px 24px rgba(125, 211, 252, 0.16);
+}
+
+.button-primary:hover {
+  transform: translateY(-2px);
+  border-color: #bae6fd;
+  background: #bae6fd;
+  box-shadow: 0 12px 30px rgba(125, 211, 252, 0.25);
+}
+
+.button-secondary {
+  border: 1px solid rgba(125, 211, 252, 0.55);
+  background: rgba(125, 211, 252, 0.04);
+  color: #7dd3fc;
+}
+
+.button-secondary:hover {
+  transform: translateY(-2px);
+  border-color: #7dd3fc;
+  background: rgba(125, 211, 252, 0.12);
+}
+
+.button-dark {
+  border: 1px solid #1c1d20;
+  background: #1c1d20;
+  color: #7dd3fc;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+}
+
+.button-dark:hover {
+  transform: translateY(-2px);
+  background: #30343b;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+}
+
+.button-arrow {
+  font-size: 1.15em;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+@keyframes heroCandleBuild {
+  from { opacity: 0; transform: scaleY(0.08); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes heroCandleTrade {
+  0%, 100% { filter: brightness(0.88); transform: scaleY(0.88); }
+  50% { filter: brightness(1.22); transform: scaleY(1.12); }
+}
+
+@keyframes heroLineFlow {
+  to { stroke-dashoffset: -60; }
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.45; r: 5; }
+  50% { opacity: 1; r: 9; }
+}
+
+.hero-candle {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: heroCandleBuild 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.hero-candle-live {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: heroCandleTrade 1.8s ease-in-out infinite;
+}
+
+.hero-chart-line {
+  animation: heroLineFlow 4s linear infinite;
+}
+
+.hero-chart-pulse {
+  animation: heroPulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-candle,
+  .hero-candle-live,
+  .hero-chart-line,
+  .hero-chart-pulse {
+    animation: none;
+  }
+}
+
+a:hover .button-arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-primary,
+  .button-secondary,
+  .button-dark,
+  .button-arrow {
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  html.page-motion-ready [data-page-motion],
+  html.page-motion-ready [data-page-motion].page-motion-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

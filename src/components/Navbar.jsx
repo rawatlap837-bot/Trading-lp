@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useActiveSection } from '../hooks/useReveal.js'
 
 const links = [
@@ -13,12 +13,21 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const active = useActiveSection(links.map((l) => l.id))
 
+  useEffect(() => {
+    if (!open) return
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [open])
+
   return (
-    <header className="sticky top-0 z-30 w-full bg-ink/90 backdrop-blur">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-3 md:px-12">
+    <header className="sticky top-0 z-30 w-full border-b border-slate-200 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.06)]">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3 px-4 py-1.5 sm:px-6 sm:py-2 md:px-12">
         <a href="#top" className="focus-ring flex items-center gap-3 rounded-full">
-          <img src="/logo.png" alt="HedgeScience" className="h-16 w-auto object-contain" />
-          <span className="hidden text-xs font-medium tracking-[0.2em] text-muted sm:inline">
+          <img src="/logo.png" alt="HedgeScience" className="h-11 w-auto object-contain sm:h-14" />
+          <span className="hidden text-xs font-semibold tracking-[0.2em] text-slate-500 sm:inline">
             HEDGESCIENCE
           </span>
         </a>
@@ -28,12 +37,12 @@ export default function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className={`group relative text-sm font-medium tracking-wide transition-colors hover:text-lime ${active === l.id ? 'text-lime' : 'text-white/80'
+              className={`group relative text-sm font-semibold tracking-wide transition-colors hover:text-sky-600 ${active === l.id ? 'text-sky-600' : 'text-slate-700'
                 }`}
             >
               {l.label}
               <span
-                className={`absolute -bottom-1 left-0 h-px bg-lime transition-all duration-300 group-hover:w-full ${active === l.id ? 'w-full' : 'w-0'
+                className={`absolute -bottom-1 left-0 h-0.5 bg-sky-500 transition-all duration-300 group-hover:w-full ${active === l.id ? 'w-full' : 'w-0'
                   }`}
               />
             </a>
@@ -43,15 +52,16 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="#enroll"
-            className="focus-ring hidden rounded-full bg-lime px-6 py-3 text-sm font-bold tracking-wide text-ink transition-transform hover:scale-105 md:inline-block"
+            className="focus-ring hidden rounded-full border border-sky-400 bg-sky-300 px-6 py-3 text-sm font-extrabold tracking-wide text-slate-900 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-sky-200 hover:shadow-md md:inline-block"
           >
             ENROL NOW
           </a>
           <button
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
+            aria-controls="mobile-navigation"
             onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition-colors hover:border-lime hover:text-lime lg:hidden"
+            className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 text-slate-700 transition-colors hover:border-sky-500 hover:bg-sky-50 hover:text-sky-600 lg:hidden"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
               <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -65,17 +75,17 @@ export default function Navbar() {
 
       <div
         className={
-          'overflow-hidden border-t border-white/10 bg-ink transition-[max-height] duration-300 ease-out lg:hidden ' +
+          'overflow-hidden border-t border-slate-200 bg-white transition-[max-height] duration-300 ease-out lg:hidden ' +
           (open ? 'max-h-96' : 'max-h-0 border-t-0')
         }
       >
-        <nav className="flex flex-col gap-4 px-6 py-4">
+        <nav id="mobile-navigation" className="flex flex-col gap-1 px-4 py-3 sm:px-6 sm:py-5">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className={`text-sm font-medium tracking-wide hover:text-lime ${active === l.id ? 'text-lime' : 'text-white/80'
+              className={`rounded-lg px-3 py-2.5 text-sm font-semibold tracking-wide hover:bg-sky-50 hover:text-sky-600 ${active === l.id ? 'bg-sky-50 text-sky-600' : 'text-slate-700'
                 }`}
             >
               {l.label}
@@ -84,14 +94,14 @@ export default function Navbar() {
           <a
             href="#enroll"
             onClick={() => setOpen(false)}
-            className="mt-2 w-fit rounded-full bg-lime px-6 py-3 text-sm font-bold tracking-wide text-ink"
+            className="focus-ring mt-2 inline-flex min-h-12 w-fit items-center justify-center gap-2 rounded-full border border-sky-400 bg-sky-300 px-6 py-3 text-sm font-extrabold tracking-wide text-slate-900 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-sky-200 hover:shadow-md"
           >
             ENROL NOW
           </a>
         </nav>
       </div>
 
-      <div className="h-px w-full bg-gradient-to-r from-lime/60 via-white/10 to-transparent" />
+      <div className="h-[2px] w-full bg-gradient-to-r from-sky-400 via-sky-200 to-transparent" />
     </header>
   )
 }
