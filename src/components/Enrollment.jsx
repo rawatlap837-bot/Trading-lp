@@ -4,27 +4,7 @@ const plans = {
   session: { label: '1:1 session', amount: 999 },
   program: { label: 'Complete learning program', amount: 20000 },
 }
-const scriptUrl = 'https://script.google.com/macros/s/AKfycbyxcuqksJXEKSlTMpji1_5Bhcn8VMTuiGm0gxgCRuo4eCiTmisYfmHr8MEU4DtGwP0MkA/exec'
-const razorpayKey = 'rzp_live_6dRNBP2vQ2b7hK' || ''
-
-function jsonp(params) {
-  return new Promise((resolve, reject) => {
-    if (!scriptUrl) return reject(new Error('Booking payments are not configured yet.'))
-    const callback = `hsCallback${Date.now()}${Math.floor(Math.random() * 1000)}`
-    const script = document.createElement('script')
-    const timeout = window.setTimeout(() => finish(new Error('Booking service timed out.')), 15000)
-    function finish(error, data) {
-      window.clearTimeout(timeout)
-      delete window[callback]
-      script.remove()
-      error ? reject(error) : resolve(data)
-    }
-    window[callback] = (data) => finish(null, data)
-    script.onerror = () => finish(new Error('Could not reach the booking service.'))
-    script.src = `${scriptUrl}${scriptUrl.includes('?') ? '&' : '?'}${new URLSearchParams({ ...params, callback })}`
-    document.body.appendChild(script)
-  })
-}
+const paymentLink = 'https://rzp.io/rzp/XBXA26SC'
 
 function localIsoDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
@@ -50,8 +30,6 @@ export default function Enrollment() {
 
     window.addEventListener('open-enrollment', openModal)
     window.addEventListener('keydown', closeModal)
-
-    jsonp({ action: 'holidays' }).then((result) => setHolidays(result.holidays || [])).catch(() => { })
 
     return () => {
       window.removeEventListener('open-enrollment', openModal)
@@ -84,49 +62,20 @@ export default function Enrollment() {
 
   const slots = ['10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']
 
-  async function loadRazorpay() {
-    if (window.Razorpay) return
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-      script.onload = resolve
-      script.onerror = () => reject(new Error('Payment checkout could not be loaded.'))
-      document.body.appendChild(script)
-    })
-  }
-
   async function submit(event) {
     event.preventDefault()
     setStatus('')
     if (plan === 'session' && (!date || !time)) return setStatus('Choose an available session date and time.')
-    if (!scriptUrl || !razorpayKey) return setStatus('Booking is not active yet. Configure the Google Sheets and Razorpay settings first.')
     setBusy(true)
     try {
-      await loadRazorpay()
-      const order = await jsonp({ action: 'createOrder', plan, date: plan === 'session' ? date : '', time: plan === 'session' ? time : '' })
-      if (!order.id) throw new Error(order.error || 'Could not create the payment order.')
-      const checkout = new window.Razorpay({
-        key: razorpayKey,
-        amount: order.amount,
-        currency: 'INR',
-        name: 'HedgeScience',
-        description: plans[plan].label,
-        order_id: order.id,
-        prefill: { name, email, contact: phone },
-        theme: { color: '#7dd3fc' },
-        handler: (payment) => {
-          const booking = { ...payment, name, phone, email, plan, date: plan === 'session' ? date : '', time: plan === 'session' ? time : '' }
-          fetch(scriptUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(booking) })
-          setStatus('Payment complete. Your booking is being verified and recorded in the booking sheet.')
-          setBusy(false)
-        },
-        modal: { ondismiss: () => setBusy(false) },
-      })
-      checkout.on('payment.failed', (failure) => {
-        setStatus(failure.error?.description || 'Payment did not complete. Please try again.')
+      const opened = window.open(paymentLink, '_blank', 'noopener,noreferrer')
+      if (!opened) {
+        setStatus('Please allow pop-ups to continue to payment.')
         setBusy(false)
-      })
-      checkout.open()
+        return
+      }
+      setStatus('Redirecting you to payment…')
+      setBusy(false)
     } catch (error) {
       setStatus(error.message || 'Unable to start checkout.')
       setBusy(false)
