@@ -53,6 +53,14 @@ function setupSheets() {
       "Razorpay payment ID",
       "Payment status",
     ]);
+  else {
+    const headers = [
+      "Submitted at", "Name", "Phone", "Email", "Plan", "Amount INR",
+      "Session date", "Session start", "Razorpay order ID", "Razorpay payment ID", "Payment status",
+    ];
+    if (bookings.getLastColumn() < headers.length) bookings.insertColumnsAfter(bookings.getLastColumn(), headers.length - bookings.getLastColumn());
+    bookings.getRange(1, 1, 1, headers.length).setValues([headers]);
+  }
 }
 
 function doGet(e) {
@@ -78,17 +86,16 @@ function doGet(e) {
 }
 
 function createOrder_(params) {
-  const plan = PLANS[params.plan];
-  if (!plan) throw new Error("Invalid enrollment option");
-  if (params.plan === "session")
-    validateBooking_({
-      plan: params.plan,
-      date: params.date,
-      time: params.time,
-      name: "Pending",
-      phone: "Pending",
-      email: "pending@example.com",
-    });
+  const booking = {
+    name: String(params.name || "").trim(),
+    phone: String(params.phone || "").trim(),
+    email: String(params.email || "").trim(),
+    plan: params.plan,
+    date: params.date || "",
+    time: params.time || "",
+  };
+  validateBooking_(booking);
+  const plan = PLANS[booking.plan];
   const props = PropertiesService.getScriptProperties();
   const keyId = props.getProperty("RAZORPAY_KEY_ID");
   const secret = props.getProperty("RAZORPAY_KEY_SECRET");
@@ -104,9 +111,9 @@ function createOrder_(params) {
       currency: "INR",
       receipt: `hs_${Date.now()}`,
       notes: {
-        plan: params.plan,
-        date: params.date || "",
-        time: params.time || "",
+        plan: booking.plan,
+        date: booking.date,
+        time: booking.time,
       },
     }),
     muteHttpExceptions: true,
@@ -116,7 +123,13 @@ function createOrder_(params) {
     throw new Error(
       order.error?.description || "Could not create payment order",
     );
-  return { id: order.id, amount: plan.amount, currency: "INR" };
+  const sheet = getSpreadsheet_().getSheetByName(BOOKINGS_SHEET);
+  if (!sheet) throw new Error("Run setupSheets() before accepting bookings");
+  sheet.appendRow([
+    new Date(), booking.name, booking.phone, booking.email, plan.label,
+    plan.amount / 100, booking.date, booking.time, order.id, "", "Pending",
+  ]);
+  return { id: order.id, amount: plan.amount, currency: "INR", key: keyId };
 }
 
 function doPost(e) {
@@ -127,27 +140,14 @@ function doPost(e) {
     const ss = getSpreadsheet_();
     const sheet = ss.getSheetByName(BOOKINGS_SHEET);
     if (!sheet) throw new Error("Run setupSheets() before accepting bookings");
-    const existing =
-      sheet.getLastRow() > 1
-        ? sheet
-            .getRange(2, 10, sheet.getLastRow() - 1, 1)
-            .getValues()
-            .flat()
-        : [];
-    if (!existing.includes(booking.razorpay_payment_id)) {
-      sheet.appendRow([
-        new Date(),
-        booking.name,
-        booking.phone,
-        booking.email,
-        PLANS[booking.plan].label,
-        PLANS[booking.plan].amount / 100,
-        booking.date || "",
-        booking.time || "",
-        booking.razorpay_order_id,
-        booking.razorpay_payment_id,
-        verified.status,
-      ]);
+    const rows = sheet.getLastRow() > 1
+      ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 11).getValues() : [];
+    const rowIndex = rows.findIndex((row) => row[8] === booking.razorpay_order_id);
+    if (rowIndex < 0) throw new Error("Booking order was not found");
+    const rowNumber = rowIndex + 2;
+    const row = rows[rowIndex];
+    if (row[10] !== "Paid") {
+      sheet.getRange(rowNumber, 10, 1, 2).setValues([[booking.razorpay_payment_id, verified.status === "captured" ? "Paid" : verified.status]]);
     }
     return jsonOutput_({ ok: true });
   } catch (err) {
@@ -218,6 +218,13 @@ function verifyPayment_(booking) {
         order.notes?.time !== booking.time))
   )
     throw new Error("Booking details do not match the paid order");
+  const ss = getSpreadsheet_();
+  const sheet = ss.getSheetByName(BOOKINGS_SHEET);
+  const rows = sheet && sheet.getLastRow() > 1
+    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 11).getValues() : [];
+  const saved = rows.find((row) => row[8] === booking.razorpay_order_id);
+  if (!saved || saved[1] !== booking.name || saved[2] !== booking.phone || saved[3] !== booking.email)
+    throw new Error("Booking details do not match the saved enrollment");
   return payment;
 }
 

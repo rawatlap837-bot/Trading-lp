@@ -4,10 +4,38 @@ const plans = {
   session: { label: '1:1 session', amount: 999 },
   program: { label: 'Complete learning program', amount: 20000 },
 }
-const paymentLink = 'https://rzp.io/rzp/XBXA26SC'
+const scriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL
+const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID
 
 function localIsoDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+function loadRazorpay() {
+  if (window.Razorpay) return Promise.resolve(window.Razorpay)
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(window.Razorpay)
+    script.onerror = () => reject(new Error('Could not load Razorpay checkout.'))
+    document.body.appendChild(script)
+  })
+}
+
+function getOrder(params) {
+  return new Promise((resolve, reject) => {
+    const callback = `hsOrder${Date.now()}${Math.floor(Math.random() * 1000)}`
+    const query = new URLSearchParams({ ...params, callback })
+    const script = document.createElement('script')
+    const cleanup = () => { delete window[callback]; script.remove() }
+    window[callback] = (result) => {
+      cleanup()
+      result.error ? reject(new Error(result.error)) : resolve(result)
+    }
+    script.onerror = () => { cleanup(); reject(new Error('Could not connect to booking service.')) }
+    script.src = `${scriptUrl}?${query}`
+    document.body.appendChild(script)
+  })
 }
 
 export default function Enrollment() {
@@ -68,14 +96,41 @@ export default function Enrollment() {
     if (plan === 'session' && (!date || !time)) return setStatus('Choose an available session date and time.')
     setBusy(true)
     try {
-      const opened = window.open(paymentLink, '_blank', 'noopener,noreferrer')
-      if (!opened) {
-        setStatus('Please allow pop-ups to continue to payment.')
-        setBusy(false)
-        return
-      }
-      setStatus('Redirecting you to payment…')
-      setBusy(false)
+      if (!scriptUrl || !razorpayKeyId) throw new Error('Payment setup is incomplete. Please contact us.')
+      const [order, RazorpayCheckout] = await Promise.all([
+        getOrder({ action: 'createOrder', plan, name, phone, email, date, time }),
+        loadRazorpay(),
+      ])
+      if (!order.id) throw new Error('Could not start checkout.')
+      const checkout = new RazorpayCheckout({
+        key: razorpayKeyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'HedgeScience',
+        description: plans[plan].label,
+        order_id: order.id,
+        prefill: { name, email, contact: phone },
+        theme: { color: '#7dd3fc' },
+        handler: async (payment) => {
+          try {
+            const verifyResponse = await fetch(scriptUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ ...payment, name, phone, email, plan, date, time }),
+            })
+            const result = await verifyResponse.json()
+            if (!verifyResponse.ok || !result.ok) throw new Error(result.error || 'Payment verification failed.')
+            setStatus('Payment confirmed. Your enrollment is booked.')
+          } catch (error) {
+            setStatus(`${error.message || 'Payment received but confirmation failed.'} Please contact us with payment ID ${payment.razorpay_payment_id}.`)
+          } finally {
+            setBusy(false)
+          }
+        },
+        modal: { ondismiss: () => { setBusy(false); setStatus('Checkout closed. Your enrollment is saved as pending payment.') } },
+      })
+      checkout.open()
+      setStatus('Your enrollment is saved. Complete payment in the checkout window.')
     } catch (error) {
       setStatus(error.message || 'Unable to start checkout.')
       setBusy(false)
