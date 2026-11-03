@@ -12,7 +12,7 @@ export default function FinalCta() {
               <h2 className="mx-auto mt-2 max-w-5xl font-display text-2xl leading-tight text-ink [text-wrap:balance] sm:text-3xl md:text-4xl">Your Financial Market Education Starts Here.</h2>
               <p className="copy-emphasis mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-ink/70"><strong>Learn the concepts. Understand the risks. Develop your edge.</strong> Take the next step towards becoming a more informed and disciplined market participant.</p>
             </div>
-            <a href="#program" className="focus-ring button-dark w-full shrink-0 px-5 text-xs sm:w-auto sm:px-8 sm:text-sm">ENROL NOW <span aria-hidden="true" className="button-arrow">&rarr;</span></a>
+            <button type="button" onClick={() => window.dispatchEvent(new CustomEvent('open-enrollment'))} className="focus-ring button-dark w-full shrink-0 px-5 text-xs sm:w-auto sm:px-8 sm:text-sm">ENROL NOW <span aria-hidden="true" className="button-arrow">&rarr;</span></button>
           </div>
         </Reveal>
       </div>

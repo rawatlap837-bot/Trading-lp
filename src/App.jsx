@@ -9,6 +9,7 @@ import WhyHedgeScience from './components/WhyM3.jsx'
 import Faq from './components/Faq.jsx'
 import FinalCta from './components/FinalCta.jsx'
 import Footer from './components/Footer.jsx'
+import Enrollment from './components/Enrollment.jsx'
 
 const tickerItems = [
   'KNOWLEDGE BEFORE EXECUTION',
@@ -70,6 +71,7 @@ export default function App() {
         <WhyHedgeScience />
         <Faq />
         <FinalCta />
+        <Enrollment />
       </main>
       <Footer />
     </div>

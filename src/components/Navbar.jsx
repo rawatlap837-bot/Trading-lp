@@ -50,12 +50,16 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href="#enroll"
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false)
+              window.dispatchEvent(new CustomEvent('open-enrollment'))
+            }}
             className="focus-ring hidden rounded-full border border-sky-400 bg-sky-300 px-6 py-3 text-sm font-extrabold tracking-wide text-slate-900 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-sky-200 hover:shadow-md md:inline-block"
           >
             ENROL NOW
-          </a>
+          </button>
           <button
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
@@ -91,13 +95,16 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a
-            href="#enroll"
-            onClick={() => setOpen(false)}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false)
+              window.dispatchEvent(new CustomEvent('open-enrollment'))
+            }}
             className="focus-ring mt-2 inline-flex min-h-12 w-fit items-center justify-center gap-2 rounded-full border border-sky-400 bg-sky-300 px-6 py-3 text-sm font-extrabold tracking-wide text-slate-900 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-sky-200 hover:shadow-md"
           >
             ENROL NOW
-          </a>
+          </button>
         </nav>
       </div>
 
