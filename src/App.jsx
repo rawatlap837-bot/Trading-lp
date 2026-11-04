@@ -10,6 +10,7 @@ import Faq from './components/Faq.jsx'
 import FinalCta from './components/FinalCta.jsx'
 import Footer from './components/Footer.jsx'
 import Enrollment from './components/Enrollment.jsx'
+import Testimonials from './components/Testimonials.jsx'
 
 const tickerItems = [
   'KNOWLEDGE BEFORE EXECUTION',
@@ -69,6 +70,7 @@ export default function App() {
         <MidCta />
         <Program />
         <WhyHedgeScience />
+        <Testimonials />
         <Faq />
         <FinalCta />
         <Enrollment />
