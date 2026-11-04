@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 
 const reviews = [
-  { image: 'review-sambhunath-patra.jpeg', name: 'Sambhunath Patra' },
-  { image: 'review-trilochan-dakua.jpeg', name: 'Trilochan Dakua' },
-  { image: 'review-kalpatru-naik.jpeg', name: 'Kalpataru Naik' },
-  { image: 'review-ananta-dev-maharana.jpeg', name: 'Ananta Dev Maharana' },
-  { image: 'review-amiya-padhy.jpeg', name: 'Amiya Padhy' },
-  { image: 'review-k-tripathy.jpeg', name: 'K Tripathy' },
-  { image: 'review-prativa-manjari-mohanta.jpeg', name: 'Prativa Manjari Mohanta' },
-  { image: 'review-rakesh-das.jpeg', name: 'Rakesh Das' },
-  { image: 'review-rasananda-swain.jpeg', name: 'Rasananda Swain' },
-  { image: 'review-prafulla-rohidas.jpeg', name: 'Prafulla Rohidas' },
-  { image: 'review-lingaraj-behera.jpeg', name: 'Lingaraj Behera' },
-  { image: 'review-viju-bhatia.jpeg', name: 'Viju Bhatia' },
+  { image: 'review-sambhunath-patra.webp', name: 'Sambhunath Patra' },
+  { image: 'review-trilochan-dakua.webp', name: 'Trilochan Dakua' },
+  { image: 'review-kalpatru-naik.webp', name: 'Kalpataru Naik' },
+  { image: 'review-ananta-dev-maharana.webp', name: 'Ananta Dev Maharana' },
+  { image: 'review-amiya-padhy.webp', name: 'Amiya Padhy' },
+  { image: 'review-k-tripathy.webp', name: 'K Tripathy' },
+  { image: 'review-prativa-manjari-mohanta.webp', name: 'Prativa Manjari Mohanta' },
+  { image: 'review-rakesh-das.webp', name: 'Rakesh Das' },
+  { image: 'review-rasananda-swain.webp', name: 'Rasananda Swain' },
+  { image: 'review-prafulla-rohidas.webp', name: 'Prafulla Rohidas' },
+  { image: 'review-lingaraj-behera.webp', name: 'Lingaraj Behera' },
+  { image: 'review-viju-bhatia.webp', name: 'Viju Bhatia' },
 ]
 
 const loopedReviews = [...reviews, ...reviews]
