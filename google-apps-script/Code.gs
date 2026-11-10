@@ -14,7 +14,7 @@
 
 const PLANS = {
   session: { label: "1:1 session", amount: 99900 }, // paise
-  program: { label: "Complete learning program", amount: 2000000 }, // paise
+  program: { label: "Complete learning program", amount: 2499900 }, // paise
 };
 const BOOKINGS_SHEET = "Bookings";
 const SLOT_TIMES = [

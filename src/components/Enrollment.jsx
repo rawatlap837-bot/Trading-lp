@@ -2,17 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 const plans = {
   session: { label: '1:1 session', amount: 999 },
-  program: { label: 'Complete learning program', amount: 20000 },
+  program: { label: 'Complete learning program', amount: 24999 },
 }
 
 // Deployed Apps Script Web App URL (must end in /exec).
 const scriptUrl =
-  'https://script.google.com/macros/s/AKfycbynYXEmlPHGkqe818SruZFHCOzP_DtKo2Q9yZvMRLdROnymrqoKnkDwgBrw1RMbZXHg/exec'
+  'https://script.google.com/macros/s/AKfycbyp7NMlBqM1XzTjgrYqcQYfrS3hFdt5FWu_o5GKpHWOr5_K1QNS9givyRO3zZuuLfy1/exec'
 
 // Public Razorpay links, matched to the selected enrollment plan.
 const paymentLinks = {
   session: 'https://rzp.io/rzp/XBXA26SC',
-  program: 'https://pages.razorpay.com/pl_Tuzwhwnp6ETUbi/view',
+  program: 'https://rzp.io/rzp/tMIpWJ6F',
 }
 
 const SLOTS = ['10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']
